@@ -33,6 +33,7 @@ let firstNumber = '';
 let secondNumber = '';
 let operator;
 let operatorPressed = false;
+let decimalPressed = false;
 let result = 0;
 
 function operate (firstNumber, secondNumber, operator) {
@@ -61,8 +62,23 @@ digits.forEach(elem => elem.addEventListener('click', () =>
  !operatorPressed ? firstNumber += elem.textContent : secondNumber += elem.textContent));
 
 const digitDeleter = document.querySelector('.delete');
-digitDeleter.addEventListener('click', () =>
-!operatorPressed ? firstNumber = firstNumber.slice(0, -1) : secondNumber = secondNumber.slice(0, -1));
+digitDeleter.addEventListener('click', () => {
+    if (!operatorPressed) {
+        firstNumber = firstNumber.slice(0, -1);
+        if(!firstNumber.includes('.')) decimalPressed = false;
+    } else {
+        secondNumber = secondNumber.slice(0, -1);
+        if(!secondNumber.includes('.')) decimalPressed = false;
+    }
+});
+
+const decimal = document.querySelector('.decimal');
+decimal.addEventListener('click', function() {
+    if (!decimalPressed) {
+        !operatorPressed ? firstNumber += '.' : secondNumber += '.';
+        decimalPressed = true;
+    } 
+});
 
 function calculateResult() {
     if (this.id === 'equal') {
@@ -70,12 +86,14 @@ function calculateResult() {
         if (!secondNumber) result = firstNumber;
         result = operate(firstNumber,secondNumber,operator);
         operatorPressed = false;
+        decimalPressed = false;
         firstNumber = '';
         secondNumber = '';
     } else {
         if(secondNumber) result = operate(result,secondNumber,operator);
         operator = this.id;
         operatorPressed = true;
+        decimalPressed = false;
         secondNumber = '';
     }
 }

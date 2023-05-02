@@ -1,6 +1,6 @@
  const add = (a, b) => {
     if (isNaN(+a) || isNaN(+b)) return undefined;
-    return a + b;
+    return +a + +b;
  };
 
 const subtract = (a, b) => {
@@ -36,6 +36,7 @@ let operatorPressed = false;
 let result = 0;
 
 function operate (firstNumber, secondNumber, operator) {
+    if (secondNumber === '') return result;
     switch (operator) {
         case 'add':
             return add(firstNumber,secondNumber);
@@ -53,21 +54,29 @@ function operate (firstNumber, secondNumber, operator) {
 };
 
 const operators = document.querySelectorAll('.operator');
-operators.forEach(elem => elem.addEventListener('click',function() {
-    operator = elem.id;
-    operatorPressed = true;
-}));
-
-const equal = document.querySelector('.equal');
-equal.addEventListener('click', function () {
-    result = operate(firstNumber,secondNumber,operator);
-    operatorPressed = false;
-    secondNumber = '';
-    console.log(result);
-
-});
+operators.forEach(elem => elem.addEventListener('click', calculateResult));
 
 const digits = document.querySelectorAll('.digit');
 digits.forEach(elem => elem.addEventListener('click', function() {
-    operatorPressed ? firstNumber += elem.textContent : secondNumber += elem.textContent;
+    !operatorPressed ? firstNumber += elem.textContent : secondNumber += elem.textContent;
+    console.log(firstNumber);
+    console.log(secondNumber);
+
 }));
+
+function calculateResult() {
+    console.log(this.id);
+    if (this.id === 'equal') {
+        if (!firstNumber) firstNumber = result;
+        if (!secondNumber) result = firstNumber;
+        result = operate(firstNumber,secondNumber,operator);
+        operatorPressed = false;
+        firstNumber = '';
+        secondNumber = '';
+    } else {
+        if(secondNumber) result = operate(result,secondNumber,operator);
+        operator = this.id;
+        operatorPressed = true;
+        secondNumber = '';
+    }
+}

@@ -57,15 +57,14 @@ const operators = document.querySelectorAll('.operator');
 operators.forEach(elem => elem.addEventListener('click', calculateResult));
 
 const digits = document.querySelectorAll('.digit');
-digits.forEach(elem => elem.addEventListener('click', function() {
-    !operatorPressed ? firstNumber += elem.textContent : secondNumber += elem.textContent;
-    console.log(firstNumber);
-    console.log(secondNumber);
+digits.forEach(elem => elem.addEventListener('click', () =>
+ !operatorPressed ? firstNumber += elem.textContent : secondNumber += elem.textContent));
 
-}));
+const digitDeleter = document.querySelector('.delete');
+digitDeleter.addEventListener('click', () =>
+!operatorPressed ? firstNumber = firstNumber.slice(0, -1) : secondNumber = secondNumber.slice(0, -1));
 
 function calculateResult() {
-    console.log(this.id);
     if (this.id === 'equal') {
         if (!firstNumber) firstNumber = result;
         if (!secondNumber) result = firstNumber;

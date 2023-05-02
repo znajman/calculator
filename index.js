@@ -58,25 +58,35 @@ const operators = document.querySelectorAll('.operator');
 operators.forEach(elem => elem.addEventListener('click', calculateResult));
 
 const digits = document.querySelectorAll('.digit');
-digits.forEach(elem => elem.addEventListener('click', () =>
- !operatorPressed ? firstNumber += elem.textContent : secondNumber += elem.textContent));
+digits.forEach(elem => elem.addEventListener('click', () => {
+    if (!operatorPressed) {
+        firstNumber += elem.textContent;
+        resultText.textContent = firstNumber;
+    } else {
+        secondNumber += elem.textContent;
+        resultText.textContent = secondNumber;
+    }
+}));
 
 const digitDeleter = document.querySelector('.delete');
 digitDeleter.addEventListener('click', () => {
     if (!operatorPressed) {
         firstNumber = firstNumber.slice(0, -1);
+        resultText.textContent = firstNumber;
         if(!firstNumber.includes('.')) decimalPressed = false;
     } else {
         secondNumber = secondNumber.slice(0, -1);
+        resultText.textContent = secondNumber;
         if(!secondNumber.includes('.')) decimalPressed = false;
     }
 });
 
 const clearAll = document.querySelector('.clear');
 clearAll.addEventListener('click', () => {
-    firstNumber = 0;
-    secondNumber = 0;
+    firstNumber = '';
+    secondNumber = '';
     result = 0;
+    resultText.textContent = '';
 });
 
 const decimal = document.querySelector('.decimal');
@@ -87,11 +97,14 @@ decimal.addEventListener('click', function() {
     } 
 });
 
+const resultText = document.querySelector('.result');
+
 function calculateResult() {
     if (this.id === 'equal') {
         if (!firstNumber) firstNumber = result;
         if (!secondNumber) result = firstNumber;
         result = operate(firstNumber,secondNumber,operator);
+        resultText.textContent = result;
         operatorPressed = false;
         decimalPressed = false;
         firstNumber = '';

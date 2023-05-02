@@ -72,6 +72,13 @@ digitDeleter.addEventListener('click', () => {
     }
 });
 
+const clearAll = document.querySelector('.clear');
+clearAll.addEventListener('click', () => {
+    firstNumber = 0;
+    secondNumber = 0;
+    result = 0;
+});
+
 const decimal = document.querySelector('.decimal');
 decimal.addEventListener('click', function() {
     if (!decimalPressed) {
